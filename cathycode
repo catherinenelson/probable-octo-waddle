@@ -1,0 +1,270 @@
+1.    Setup a local database, create a table, insert some records using any database client 
+
+2.    Write SQL to insert and retrieve records from the above table using the same database client  
+
+3.    Write java code to insert and retrieve the records from the database table. 
+
+Create a REST API in JAVA to insert and retrieve the same records
+
+
+
+1)
+CREATE DATABASE employee;
+CREATE TABLE emp (
+    
+    CustomerName varchar(255),
+    ContactName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);
+
+INSERT INTO emp (CustomerName, ContactName, Address, City)
+VALUES ('Naiomi', 'Tom', 'Maharashtra Malad West', 'Mumbai'),
+VALUES ('Nicole', 'Tom', 'Maharashtra Malad West', 'Mumbai'),
+VALUES ('Natalia', 'Tom', 'Maharashtra Malad West', 'Mumbai'),
+VALUES ('janice', 'Dcruz', 'Maharashtra Malad East', 'Mumbai'),
+VALUES ('jennifer', 'Dcruz', 'Maharashtra Malad East', 'Mumbai');
+
+
+2)    INSERTING new RECORDS into emp table
+
+
+INSERT INTO emp (CustomerName, ContactName, Address, City)
+VALUES ('melissa', 'Tauro', 'Maharashtra goregaon West', 'Mumbai'),
+VALUES ('melanie', 'Tauro', 'Maharashtra goregaon West', 'Mumbai'),
+VALUES ('NESSI', 'Tauro', 'Maharashtra goregaon West', 'Mumbai');
+
+        RETRIEVING ALL RECORDS from emp table
+
+SELECT * FROM emp;
+
+	RETRIEVING ADDRESS AND CITY from employee
+
+SELECT Address, City FROM emp;
+
+
+3)Write java code to insert and retrieve the records from the database table. 
+
+import java.sql.*;
+
+public class JDBCExample {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost/employee";
+
+   //  Database credentials
+   static final String USER = "username";
+   static final String PASS = "password";
+   
+   public static void main(String[] args) {
+   Connection conn = null;
+   Statement stmt = null;
+   try{
+      //STEP 2: Register JDBC driver
+      Class.forName("com.mysql.jdbc.Driver");
+
+      //STEP 3: Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully...");
+      
+      //STEP 4: Execute a query
+      System.out.println("Inserting records into the table...");
+      stmt = conn.createStatement();
+      
+      String sql = "INSERT INTO emp " +
+                   "VALUES ('catherine', 'Zara', 'UP', 'uttarpradesh')";
+      stmt.executeUpdate(sql);
+      sql = "INSERT INTO emp " +
+                   "VALUES ('subin', 'Mahnaz', 'Fatma', 'kerala')";
+      stmt.executeUpdate(sql);
+      
+      System.out.println("Inserted records into the table...");
+
+   }catch(SQLException se){
+      //Handle errors for JDBC
+      se.printStackTrace();
+   }catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se){
+      }// do nothing
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+      }//end finally try
+   }//end try
+   System.out.println("Successs!");
+}//end main
+}//end JDBCExample
+
+
+
+TO RETRIEVE RECORDS FROM DATABASE USING JAVA
+
+ try {
+ 
+ 
+// Get a result set containing all data from test_table
+ 
+Statement statement = connection.createStatement();
+ 
+ResultSet results = statement.executeQuery("SELECT * FROM emp");
+ 
+ 
+// For each row of the result set ...
+ 
+while (results.next()) {
+ 
+ 
+  // Get the data from the current row using the column index - column data are in the VARCHAR format
+ 
+  String data = results.getString(1);
+ 
+  System.out.println("Fetching data by column index for row " + results.getRow() + " : " + data);
+ 
+ 
+  // Get the data from the current row using the column name - column data are in the VARCHAR format
+ 
+  data = results.getString("test_col");
+ 
+  System.out.println("Fetching data by column name for row " + results.getRow() + " : " + data);
+ 
+ 
+}
+} catch (SQLException e) {
+ 
+  System.out.println("Could not retrieve data from the database " + e.getMessage());
+    }
+ 
+  }
+}
+
+4)
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.2.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>rest-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>rest-service</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>COPY
+The following listing shows the build.gradle file that is created when you choose Gradle:
+
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+
+
+
+package com.example.restservice;
+
+public class Greeting {
+
+	private final long id;
+	private final String content;
+
+	public Greeting(long id, String content) {
+		this.id = id;
+		this.content = content;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+}
+
+
+package com.example.restservice;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class GreetingController {
+
+	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
+
+	@GetMapping("/greeting")
+	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+	}
+}
